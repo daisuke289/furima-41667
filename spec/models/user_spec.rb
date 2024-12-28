@@ -26,7 +26,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'emailが重複している場合は登録できない' do
-        another_user = FactoryBot.create(:user, email: @user.email)
+        FactoryBot.create(:user, email: @user.email)
         @user.valid?
         expect(@user.errors.full_messages).to include('Email has already been taken')
       end
