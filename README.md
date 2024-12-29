@@ -1,60 +1,70 @@
 # Furima-41667 Database Design
 
 ## Database Schema
-以下は、各テーブルの構造とリレーションを記載したものです。
+以下は、各テーブルの構造とアソシエーションを記載したものです。
+
+---
 
 ### Users Table
-| Column             | Type   | Options                  |
-|--------------------|--------|--------------------------|
-| id                 | bigint | Primary Key             |
-| nickname           | string | null: false             |
-| email              | string | null: false, unique: true |
-| encrypted_password | string | null: false             |
-| last_name          | string | null: false             |
-| first_name         | string | null: false             |
-| last_name_kana     | string | null: false             |
-| first_name_kana    | string | null: false             |
-| birthday           | date   | null: false             |
+| Column             | Type       | Options                  |
+|--------------------|------------|--------------------------|
+| nickname           | string     | null: false             |
+| email              | string     | null: false, unique: true |
+| encrypted_password | string     | null: false             |
+| last_name          | string     | null: false             |
+| first_name         | string     | null: false             |
+| last_name_kana     | string     | null: false             |
+| first_name_kana    | string     | null: false             |
+| birthday           | date       | null: false             |
+
+#### **Associations**
+- has_many :items
+- has_many :purchases
+
+---
 
 ### Items Table
-| Column             | Type    | Options                   |
-|--------------------|---------|---------------------------|
-| id                 | bigint  | Primary Key              |
-| name               | string  | null: false              |
-| description        | text    | null: false              |
-| category_id        | integer | null: false              |
-| condition_id       | integer | null: false              |
-| shipping_fee_id    | integer | null: false              |
-| prefecture_id      | integer | null: false              |
-| shipping_days_id   | integer | null: false              |
-| price              | integer | null: false              |
-| user_id            | bigint  | null: false, foreign_key |
+| Column             | Type       | Options                   |
+|--------------------|------------|---------------------------|
+| name               | string     | null: false              |
+| description        | text       | null: false              |
+| category           | integer    | null: false              |
+| condition          | integer    | null: false              |
+| shipping_fee       | integer    | null: false              |
+| prefecture         | integer    | null: false              |
+| shipping_day       | integer    | null: false              |
+| price              | integer    | null: false              |
+| user               | references | null: false, foreign_key: true |
+
+#### **Associations**
+- belongs_to :user
+- has_one :purchase
+
+---
 
 ### Purchases Table
-| Column   | Type    | Options                   |
-|----------|---------|---------------------------|
-| id       | bigint  | Primary Key              |
-| user_id  | bigint  | null: false, foreign_key |
-| item_id  | bigint  | null: false, foreign_key |
+| Column   | Type       | Options                   |
+|----------|------------|---------------------------|
+| user     | references | null: false, foreign_key: true |
+| item     | references | null: false, foreign_key: true |
+
+#### **Associations**
+- belongs_to :user
+- belongs_to :item
+- has_one :shipping_address
+
+---
 
 ### ShippingAddresses Table
-| Column         | Type    | Options                   |
-|----------------|---------|---------------------------|
-| id             | bigint  | Primary Key              |
-| purchase_id    | bigint  | null: false, foreign_key |
-| postal_code    | string  | null: false              |
-| prefecture_id  | integer | null: false              |
-| city           | string  | null: false              |
-| address        | string  | null: false              |
-| building_name  | string  |                          |
-| phone_number   | string  | null: false              |
+| Column         | Type       | Options                   |
+|----------------|------------|---------------------------|
+| purchase       | references | null: false, foreign_key: true |
+| postal_code    | string     | null: false              |
+| prefecture     | integer    | null: false              |
+| city           | string     | null: false              |
+| address        | string     | null: false              |
+| building_name  | string     |                          |
+| phone_number   | string     | null: false              |
 
-## Relations
-- `users` has_many `items`
-- `users` has_many `purchases`
-- `items` belongs_to `users`
-- `items` has_one `purchase`
-- `purchases` belongs_to `users`
-- `purchases` belongs_to `items`
-- `purchases` has_one `shipping_address`
-- `shipping_addresses` belongs_to `purchase`
+#### **Associations**
+- belongs_to :purchase
