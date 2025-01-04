@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    # トップページ用の処理（必要に応じて）
+    @items = Item.includes(:image).order(created_at: :desc)
   end
 
   def new

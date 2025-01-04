@@ -1,6 +1,8 @@
 class Item < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
-
+  def sold_out?
+    purchase.present?
+  end
   belongs_to :user
   belongs_to :category
   belongs_to :condition
@@ -9,6 +11,7 @@ class Item < ApplicationRecord
   belongs_to :shipping_day
 
   has_one_attached :image # ActiveStorage用の設定
+  has_one :purchase
 
   # バリデーション
   validates :name, presence: true
