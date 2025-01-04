@@ -5,11 +5,7 @@ class User < ApplicationRecord
 
   # バリデーション
   validates :nickname, presence: true
-  validates :email, presence: true, uniqueness: true,
-                    format: { with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i, message: 'is invalid' }
-  validates :password, presence: true, length: { minimum: 6 },
-                       format: { with: /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i, message: 'must include both letters and numbers' }
-  validates :password_confirmation, presence: true
+  validates :password, format: { with: /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i, message: 'must include both letters and numbers' }
 
   # 本人情報確認
   with_options presence: true do
