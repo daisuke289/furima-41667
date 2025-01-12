@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
+    # @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
   end
 
   def new
@@ -10,11 +10,9 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = Item.new(item_params)
-    @item.user = current_user # ログイン中のユーザーを関連付け
-
+    @item = Item.new(item_params.merge(user: current_user))
     if @item.save
-      redirect_to root_path, notice: '商品が出品されました。'
+      redirect_to root_path
     else
       render :new
     end
