@@ -25,13 +25,17 @@ const price = () => {
   });
 };
 
-// Turboイベントリスナー
 document.addEventListener("turbo:load", () => {
-  console.log("turbo:load event triggered"); // 確認用
-  price();
+  console.log("turbo:load event triggered");
+  price(); // 初回ロード時の関数実行
 });
 
 document.addEventListener("turbo:render", () => {
-  console.log("turbo:render event triggered"); // 確認用
-  price();
+  console.log("turbo:render event triggered");
+
+  // DOM要素の再取得
+  const priceInput = document.getElementById("item-price");
+  if (priceInput) {
+    price(); // 再描画後の関数再実行
+  }
 });
