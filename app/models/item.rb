@@ -11,7 +11,6 @@ class Item < ApplicationRecord
   belongs_to :shipping_day
 
   has_one_attached :image # ActiveStorage用の設定
-  has_one :purchase
 
   # バリデーション
   # 必須項目
@@ -28,7 +27,4 @@ class Item < ApplicationRecord
   validates :image, presence: true
 
   # インスタンスメソッド
-  def sold_out?
-    purchase.present?
-  end
 end
