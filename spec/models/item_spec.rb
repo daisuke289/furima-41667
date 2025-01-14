@@ -12,6 +12,24 @@ RSpec.describe Item, type: :model do
   end
 
   context '商品の出品ができない場合' do
+    it '名前が空では保存できないこと' do
+      @item.name = nil
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Name can't be blank")
+    end
+
+    it '説明が空では保存できないこと' do
+      @item.description = nil
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Description can't be blank")
+    end
+
+    it '画像が添付されていないと保存できないこと' do
+      @item.image = nil
+      @item.valid?
+      expect(@item.errors.full_messages).to include("Image can't be blank")
+    end
+
     it 'category_idが未選択（1）では保存できないこと' do
       @item.category_id = 1
       @item.valid?
