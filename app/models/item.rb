@@ -9,6 +9,7 @@ class Item < ApplicationRecord
   belongs_to :shipping_fee
   belongs_to :prefecture
   belongs_to :shipping_day
+  has_one :purchase # 購入履歴との関連（必要に応じて設定）
 
   has_one_attached :image # ActiveStorage用の設定
 
@@ -27,4 +28,8 @@ class Item < ApplicationRecord
   validates :image, presence: true
 
   # インスタンスメソッド
+  def sold_out?
+    # 購入情報が関連付けられているかをチェック
+    purchase.present?
+  end
 end
