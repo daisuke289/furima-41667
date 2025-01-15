@@ -28,8 +28,4 @@ class Item < ApplicationRecord
   validates :image, presence: true
 
   # インスタンスメソッド
-  def sold_out?
-    # 購入情報が関連付けられているかをチェック
-    purchase.present?
-  end
 end
