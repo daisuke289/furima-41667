@@ -26,6 +26,14 @@ class ItemsController < ApplicationController
     redirect_to root_path unless current_user == @item.user
   end
 
+  def update
+    if @item.update(item_params)
+      redirect_to item_path(@item), notice: '商品情報が更新されました'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def item_params
