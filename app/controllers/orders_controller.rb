@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   def index
     @item = Item.find(params[:item_id])
-    # 購入機能に必要な他の処理はここに記載します
+    @order_form = OrderForm.new
   end
 
   def create
