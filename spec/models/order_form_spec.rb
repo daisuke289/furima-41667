@@ -10,14 +10,44 @@ RSpec.describe OrderForm, type: :model do
     )
   end
 
-  it '全ての情報が正しく入力されていれば保存できる' do
-    expect(@order_form).to be_valid
-  end
+  describe '購入情報の保存' do
+    context '購入がうまくいくとき' do
+      it 'すべての値が正しく入力されていれば保存できる' do
+        expect(@order_form).to be_valid
+      end
 
-  it 'postal_codeが空では保存できない' do
-    @order_form.postal_code = ''
-    expect(@order_form).to_not be_valid
-  end
+      it '建物名が空でも保存できる' do
+        @order_form.building = ''
+        expect(@order_form).to be_valid
+      end
+    end
 
-  # 他のテストケースも追加
+    context '購入がうまくいかないとき' do
+      it '郵便番号が空では保存できない' do
+        @order_form.postal_code = ''
+        @order_form.valid?
+        expect(@order_form.errors.full_messages).to include('Postal codeを入力してください')
+      end
+
+      it '郵便番号がハイフンを含まない形式では保存できない' do
+        @order_form.postal_code = '1234567'
+        @order_form.valid?
+        expect(@order_form.errors.full_messages).to include('Postal codeはハイフンを含めて入力してください')
+      end
+
+      it '電話番号が空では保存できない' do
+        @order_form.phone_number = ''
+        @order_form.valid?
+        expect(@order_form.errors.full_messages).to include('Phone numberを入力してください')
+      end
+
+      it '電話番号が12桁以上では保存できない' do
+        @order_form.phone_number = '090123456789'
+        @order_form.valid?
+        expect(@order_form.errors.full_messages).to include('Phone numberは10桁または11桁で入力してください')
+      end
+
+      # 他のエラーケースも追加可能
+    end
+  end
 end
