@@ -31,8 +31,10 @@
     </div>
     <%# /支払額の表示 %>
 
-    <%= form_with model: @order_form, url: item_orders_path(@item), local: true do |f| %>
+    <%= form_with model: @order_form, url: item_orders_path(@item), local: true, id: "charge-form" do |f| %>
     <%= render 'shared/error_messages', model: f.object %> <!-- エラーメッセージ -->
+    <!-- Pay.jpのトークンを送信する hidden_field -->
+    <%= hidden_field_tag :token, nil, id: "card-token" %>
     <%# カード情報の入力 %>
     <div class='credit-card-form'>
       <h1 class='info-input-haedline'>
@@ -43,7 +45,7 @@
           <label class="form-text">カード情報</label>
           <span class="indispensable">必須</span>
         </div>
-        <div id="number-form" class="input-default"></div>
+        <input type="text" class="input-default" id="card-number" placeholder="1234 5678 9012 3456">
         <div class='available-card'>
           <%= image_tag 'card-visa.gif', class: 'card-logo'%>
           <%= image_tag 'card-mastercard.gif', class: 'card-logo'%>
@@ -57,7 +59,8 @@
           <span class="indispensable">必須</span>
         </div>
         <div class='input-expiration-date-wrap'>
-          <div id="expiry-form" class="input-default"></div>
+          <input type="text" class="input-default" id="card-exp-month" placeholder="MM">
+          <input type="text" class="input-default" id="card-exp-year" placeholder="YY">
         </div>
       </div>
       <div class="form-group">
@@ -65,7 +68,7 @@
           <label class="form-text">セキュリティコード</label>
           <span class="indispensable">必須</span>
         </div>
-        <div id="cvc-form" class="input-default"></div>
+        <input type="text" class="input-default" id="card-cvc" placeholder="CVC">
       </div>
     </div>
     <%# /カード情報の入力 %>

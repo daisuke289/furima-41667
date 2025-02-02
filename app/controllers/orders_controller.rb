@@ -18,6 +18,7 @@ class OrdersController < ApplicationController
         render :index
       end
     else
+      Rails.logger.info "バリデーションエラー: #{@order_form.errors.full_messages}"
       render :index
     end
   end
