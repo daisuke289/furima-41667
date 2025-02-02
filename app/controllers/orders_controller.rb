@@ -1,16 +1,16 @@
 class OrdersController < ApplicationController
   def index
     @item = Item.find(params[:item_id])
-    @order_form = OrderForm.new
+    @order = Order.new
   end
 
   def create
     @item = Item.find(params[:item_id])
-    @order_form = OrderForm.new(order_form_params)
-    if @order_form.valid?
+    @order = Order.new(order_params)
+    if @order.valid?
       begin
         pay_item # クレジットカード決済処理
-        @order_form.save
+        @order.save
         redirect_to root_path
       rescue Payjp::PayjpError => e
         Rails.logger.error("PAY.JPエラー: #{e.message}")
@@ -18,15 +18,15 @@ class OrdersController < ApplicationController
         render :index
       end
     else
-      Rails.logger.info "バリデーションエラー: #{@order_form.errors.full_messages}"
+      Rails.logger.info "バリデーションエラー: #{@order.errors.full_messages}"
       render :index
     end
   end
 
   private
 
-  def order_form_params
-    params.require(:order_form).permit(:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number, :token).merge(
+  def order_params
+    params.require(:order).permit(:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number, :token).merge(
       user_id: current_user.id, item_id: params[:item_id]
     )
   end
@@ -35,7 +35,7 @@ class OrdersController < ApplicationController
     Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: @item.price,
-      card: order_form_params[:token],
+      card: order_params[:token],
       currency: 'jpy'
     )
   end
