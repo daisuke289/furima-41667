@@ -18,12 +18,10 @@ class OrdersController < ApplicationController
         @order_form.save
         redirect_to root_path
       rescue Payjp::PayjpError => e
-        Rails.logger.error("PAY.JPエラー: #{e.message}")
         flash.now[:alert] = "クレジットカード決済に失敗しました: #{e.message}"
         render :index
       end
     else
-      Rails.logger.info "バリデーションエラー: #{@order_form.errors.full_messages}"
       render :index
     end
   end
