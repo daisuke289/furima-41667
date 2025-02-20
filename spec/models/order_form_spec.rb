@@ -2,14 +2,13 @@ require 'rails_helper'
 
 RSpec.describe OrderForm, type: :model do
   before do
-    @user = FactoryBot.create(:user)
-    puts "Created user: #{@user.inspect}"  # デバッグ出力
+    @user = FactoryBot.build(:user)
+    @user.id = 1  # 明示的にIDを設定
 
-    @item = FactoryBot.create(:item)
-    puts "Created item: #{@item.inspect}"  # デバッグ出力
+    @item = FactoryBot.build(:item)
+    @item.id = 1  # 明示的にIDを設定
 
     @order_form = FactoryBot.build(:order_form, user_id: @user.id, item_id: @item.id)
-    puts "Built order_form: #{@order_form.inspect}" # デバッグ出力
   end
 
   describe '商品購入情報の保存' do
