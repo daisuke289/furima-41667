@@ -11,18 +11,13 @@ class OrdersController < ApplicationController
 
   def create
     @order_form = OrderForm.new(order_params)
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     if @order_form.valid?
-      begin
-        pay_item
-        @order_form.save
-        redirect_to root_path
-      rescue Payjp::PayjpError => e
-        flash.now[:alert] = "クレジットカード決済に失敗しました: #{e.message}"
-        render :index
-      end
+      pay_item
+      @order_form.save
+      redirect_to root_path
     else
-      render :index
+      @item = Item.find(params[:item_id])
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -45,8 +40,13 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order_form).permit(:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number)
-          .merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+    params.require(:order_form)
+          .permit(:postal_code, :prefecture_id, :city, :address, :building_name, :phone_number)
+          .merge(
+            user_id: current_user.id,
+            item_id: params[:item_id],
+            token: params[:order_form][:token]
+          )
   end
 
   def pay_item
