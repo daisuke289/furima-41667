@@ -180,7 +180,6 @@ GEM
       racc
     payjp (0.0.16)
       rest-client (~> 2.0)
-    pg (1.5.9)
     psych (5.2.2)
       date
       stringio
@@ -333,7 +332,6 @@ DEPENDENCIES
   jbuilder
   mysql2 (~> 0.5)
   payjp
-  pg
   puma (~> 5.0)
   rails (~> 7.0.0)
   rspec-rails (~> 4.0.0)
